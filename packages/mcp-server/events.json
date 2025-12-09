@@ -1,0 +1,8 @@
+{
+  "type": "SCAN_EXECUTED",
+  "timestamp": "2025-12-09T12:00:00Z",
+  "payload": {
+    "hotspots": ["CPU Usage", "Memory Requested"]
+  }
+}
+
