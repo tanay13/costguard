@@ -18,12 +18,13 @@ func ScanHandler(c *gin.Context) {
 	var requestData map[string]interface{}
 
 	if err := c.BindJSON(&requestData); err != nil {
-		c.JSON(400, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Not a valid JSON",
 		})
+		return
 	}
 
-	c.JSON(200, requestData)
+	c.JSON(http.StatusOK, requestData)
 }
 
 func FixPlansHandler(c *gin.Context) {
@@ -37,8 +38,10 @@ func EventsHandler(c *gin.Context) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			c.JSON(http.StatusNotFound, gin.H{"message": "No file found at that path"})
+			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error reading from the file"})
+		return
 	}
 
 	c.Data(200, "application/json", jsonBytes)
