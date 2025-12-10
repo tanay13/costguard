@@ -19,7 +19,6 @@ func GenerateFixPlan(req types.FixPlanRequest) types.FixPlanResponse {
 		}
 	}
 
-	// totals
 	expected := 0.0
 	for _, a := range actions {
 		expected += a.ExpectedCost
@@ -42,4 +41,3 @@ func GenerateFixPlan(req types.FixPlanRequest) types.FixPlanResponse {
 		Summary:           summary,
 	}
 }
-

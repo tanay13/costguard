@@ -8,14 +8,11 @@ import (
 )
 
 const (
-	minCPU = 50.0 // 50m minimum inferred request
-	minMem = 0.1  // 0.1 GB minimum inferred request
-
-	under = 0.50 // underutilized: p95 < 50% of inferred request
-	over  = 0.90 // overutilized: p95 > 90% of inferred request
+	minCPU = 50.0
+	minMem = 0.1
+	under  = 0.50
+	over   = 0.90
 )
-
-// ======== KUBERNETES FIXES ========
 
 func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types.FixAction {
 	actions := []types.FixAction{}
@@ -23,24 +20,21 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 	cpu, hasCPU := metric.Metrics["cpu_milli"]
 	mem, hasMem := metric.Metrics["memory_gb"]
 
-	// 1. Infer requests
 	inferredReqCPU := math.Max(cpu.P95*2, minCPU)
 	inferredReqMem := math.Max(mem.P95*2, minMem)
 
-	// 2. CPU underutilized → scale down
 	if hasCPU && cpu.P95 < inferredReqCPU*under {
 		actions = append(actions, makeK8sFixAction(
 			metric.Resource,
 			"rightsize_cpu_request",
 			"resources.requests.cpu",
-			-40, // reduce CPU by 40%
+			-40,
 			"CPU is underutilized compared to inferred request",
 			metric.CostUSD,
 			priority,
 		))
 	}
 
-	// 3. CPU overutilized → scale up
 	if hasCPU && cpu.P95 > inferredReqCPU*over {
 		actions = append(actions, makeK8sFixAction(
 			metric.Resource,
@@ -53,7 +47,6 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 		))
 	}
 
-	// 4. Memory underutilized → scale down
 	if hasMem && mem.P95 < inferredReqMem*under {
 		actions = append(actions, makeK8sFixAction(
 			metric.Resource,
@@ -66,7 +59,6 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 		))
 	}
 
-	// 5. Memory overutilized → scale up
 	if hasMem && mem.P95 > inferredReqMem*over {
 		actions = append(actions, makeK8sFixAction(
 			metric.Resource,
@@ -93,7 +85,6 @@ func makeK8sFixAction(
 ) types.FixAction {
 	expected := currentCost * (1 - (percent / 100.0))
 	if percent > 0 {
-		// scaling up increases cost
 		expected = currentCost * (1 + (percent / 100.0))
 	}
 
