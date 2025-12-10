@@ -8,21 +8,32 @@ import (
 func DataPointAggregator(metricCollection []types.MetricCollection) []types.AggregatedMetrics {
 	aggregatedMetrics := make([]types.AggregatedMetrics, 0)
 
-	providerMetrics := make(map[types.Provider]interface{}, 0)
+	providerMetrics := make(map[types.Provider]map[string][]types.MetricCollection)
 
 	for _, c := range metricCollection {
-		switch c.Provider {
-		case types.ProviderKubernetes:
-			metricsSlice, _ := providerMetrics[types.ProviderKubernetes].([]types.K8sResourceMetrics)
-			metricsSlice = append(metricsSlice, c.Metrics.K8sResourceMetrics)
-			providerMetrics[types.ProviderKubernetes] = metricsSlice
+		if providerMetrics[c.Provider] == nil {
+			providerMetrics[c.Provider] = make(map[string][]types.MetricCollection)
 		}
+
+		resourceName := c.Resource
+		if resourceName == "" {
+			resourceName = "unknown"
+		}
+
+		providerMetrics[c.Provider][resourceName] =
+			append(providerMetrics[c.Provider][resourceName], c)
 	}
 
-	if k8sMetrics, ok := providerMetrics[types.ProviderKubernetes].([]types.K8sResourceMetrics); ok {
-		result := provider.KubernetesMetricAggregator(k8sMetrics)
+	if k8sGroups, ok := providerMetrics[types.ProviderKubernetes]; ok {
+		result := provider.KubernetesMetricAggregator(k8sGroups)
 		aggregatedMetrics = append(aggregatedMetrics, result...)
 	}
+
+	// For Future providers similar code can be used:
+	// if lambdaGroups, ok := providerMetrics[types.ProviderAWSLambda]; ok {
+	//     result := provider.LambdaMetricAggregator(lambdaGroups)
+	//     aggregatedMetrics = append(aggregatedMetrics, result...)
+	// }
 
 	return aggregatedMetrics
 }

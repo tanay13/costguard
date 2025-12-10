@@ -11,11 +11,13 @@ const (
 
 type MetricCollection struct {
 	Provider  Provider        `json:"provider"`
+	Resource  string          `json:"resource"`
 	TimeStamp int64           `json:"timestamp"`
 	Metrics   ResourceMetrics `json:"resource_metrics"`
 }
 
 type K8sResourceMetrics struct {
+	Resource string  `json:"resource,omitempty"`
 	CpuMilli float64 `json:"cpu_milli,omitempty"`
 	MemoryGB float64 `json:"memory_gb,omitempty"`
 }
@@ -43,12 +45,16 @@ type ResourceMetrics struct {
 	VercelResourceMetrics VercelResourceMetrics `json:"vercel_resource,omitempty"`
 }
 
+type MetricStat struct {
+	P50 float64 `json:"p50"`
+	P95 float64 `json:"p95"`
+	Avg float64 `json:"avg"`
+}
+
 type AggregatedMetrics struct {
-	Provider       Provider `json:"provider"`
-	Resource       string   `json:"resource"`
-	P50            float64  `json:"p50"`
-	P95            float64  `json:"p95"`
-	Avg            float64  `json:"avg"`
-	MonthlyCostUSD float64  `json:"monthly_cost_usd"`
-	DataPoints     int      `json:"data_points"`
+	Provider   Provider              `json:"provider"`
+	Resource   string                `json:"resource"`
+	Metrics    map[string]MetricStat `json:"metrics"`
+	CostUSD    float64               `json:"cost_usd"`
+	DataPoints int                   `json:"data_points"`
 }

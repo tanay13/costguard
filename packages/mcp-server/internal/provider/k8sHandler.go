@@ -10,51 +10,44 @@ const (
 	MemoryUsageCost = 0.05
 )
 
-func KubernetesMetricAggregator(metrics []types.K8sResourceMetrics) []types.AggregatedMetrics {
+func KubernetesMetricAggregator(groups map[string][]types.MetricCollection) []types.AggregatedMetrics {
+	out := make([]types.AggregatedMetrics, 0)
 
-	if len(metrics) == 0 {
-		return []types.AggregatedMetrics{}
+	for resourceName, points := range groups {
+		cpuValues := make([]float64, 0, len(points))
+		memValues := make([]float64, 0, len(points))
+
+		for _, p := range points {
+			k := p.Metrics.K8sResourceMetrics
+			cpuValues = append(cpuValues, k.CpuMilli)
+			memValues = append(memValues, k.MemoryGB)
+		}
+
+		p50cpu := utils.ComputePercentile(cpuValues, 50)
+		p95cpu := utils.ComputePercentile(cpuValues, 95)
+		avgcpu := utils.CalculateAvg(cpuValues)
+
+		p50mem := utils.ComputePercentile(memValues, 50)
+		p95mem := utils.ComputePercentile(memValues, 95)
+		avgmem := utils.CalculateAvg(memValues)
+
+		cost := (avgcpu * CpuUsageCost) + (avgmem * MemoryUsageCost)
+
+		metrics := map[string]types.MetricStat{
+			"cpu_milli": {P50: p50cpu, P95: p95cpu, Avg: avgcpu},
+			"memory_gb": {P50: p50mem, P95: p95mem, Avg: avgmem},
+		}
+
+		agg := types.AggregatedMetrics{
+			Provider:   types.ProviderKubernetes,
+			Resource:   resourceName,
+			Metrics:    metrics,
+			CostUSD:    cost,
+			DataPoints: len(points),
+		}
+
+		out = append(out, agg)
 	}
 
-	cpuUsage := make([]float64, 0)
-	memoryUsage := make([]float64, 0)
-
-	aggregatedMetrics := make([]types.AggregatedMetrics, 0)
-
-	for _, r := range metrics {
-		cpuUsage = append(cpuUsage, r.CpuMilli)
-		memoryUsage = append(memoryUsage, r.MemoryGB)
-	}
-
-	p50_cpu_usage := utils.ComputePercentile(cpuUsage, 50)
-	p95_cpu_usage := utils.ComputePercentile(cpuUsage, 95)
-	average_cpu_usage := utils.CalculateAvg(cpuUsage)
-	monthly_cost_cpu := average_cpu_usage * CpuUsageCost
-
-	cpu_metrics := types.AggregatedMetrics{
-		Provider:       types.ProviderKubernetes,
-		Resource:       "cpu_milli",
-		P50:            p50_cpu_usage,
-		P95:            p95_cpu_usage,
-		Avg:            average_cpu_usage,
-		MonthlyCostUSD: monthly_cost_cpu,
-	}
-
-	p50_memory_usage := utils.ComputePercentile(memoryUsage, 50)
-	p95_memory_usage := utils.ComputePercentile(memoryUsage, 95)
-	average_memory_usage := utils.CalculateAvg(memoryUsage)
-	monthly_cost_memory := average_memory_usage * MemoryUsageCost
-
-	memory_metrics := types.AggregatedMetrics{
-		Provider:       types.ProviderKubernetes,
-		Resource:       "memory_gb",
-		P50:            p50_memory_usage,
-		P95:            p95_memory_usage,
-		Avg:            average_memory_usage,
-		MonthlyCostUSD: monthly_cost_memory,
-	}
-	aggregatedMetrics = append(aggregatedMetrics, cpu_metrics)
-	aggregatedMetrics = append(aggregatedMetrics, memory_metrics)
-
-	return aggregatedMetrics
+	return out
 }
