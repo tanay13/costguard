@@ -1,4 +1,32 @@
-{
-  "name": "k8s Resource",
-  "CPU": "4Gi"
-}
+[
+  {
+    "provider": "kubernetes",
+    "timestamp": 110000123,
+    "resource_metrics": {
+      "k8s_resource": {
+        "cpu_milli": 23,
+        "memory_gb": 10
+      }
+    }
+  },
+  {
+    "provider": "kubernetes",
+    "timestamp": 110000123,
+    "resource_metrics": {
+      "k8s_resource": {
+        "cpu_milli": 20,
+        "memory_gb": 14
+      }
+    }
+  },
+  {
+    "provider": "kubernetes",
+    "timestamp": 110000123,
+    "resource_metrics": {
+      "k8s_resource": {
+        "cpu_milli": 29,
+        "memory_gb": 19
+      }
+    }
+  }
+]

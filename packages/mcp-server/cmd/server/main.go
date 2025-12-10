@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tanay13/costguard/packages/mcp-server/internal/scan"
+	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
 )
 
 func HealthHandler(c *gin.Context) {
@@ -15,7 +17,7 @@ func HealthHandler(c *gin.Context) {
 }
 
 func ScanHandler(c *gin.Context) {
-	var requestData map[string]interface{}
+	var requestData []types.MetricCollection
 
 	if err := c.BindJSON(&requestData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -23,8 +25,9 @@ func ScanHandler(c *gin.Context) {
 		})
 		return
 	}
+	resp := scan.DataPointAggregator(requestData)
 
-	c.JSON(http.StatusOK, requestData)
+	c.JSON(http.StatusOK, resp)
 }
 
 func FixPlansHandler(c *gin.Context) {
