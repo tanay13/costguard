@@ -20,7 +20,7 @@ type K8sResourceMetrics struct {
 	MemoryGB float64 `json:"memory_gb,omitempty"`
 }
 
-type LamdaResourceMetrics struct {
+type LambdaResourceMetrics struct {
 	DurationMs  float64 `json:"duration_ms,omitempty"`
 	Invocations float64 `json:"invocations,omitempty"`
 }
@@ -38,7 +38,7 @@ type VercelResourceMetrics struct {
 
 type ResourceMetrics struct {
 	K8sResourceMetrics    K8sResourceMetrics    `json:"k8s_resource,omitempty"`
-	LamdaResourceMetrics  LamdaResourceMetrics  `json:"lamda_resource,omitempty"`
+	LambdaResourceMetrics LambdaResourceMetrics `json:"lambda_resource,omitempty"`
 	VMResourceMetrics     VMResourceMetrics     `json:"vm_resource,omitempty"`
 	VercelResourceMetrics VercelResourceMetrics `json:"vercel_resource,omitempty"`
 }

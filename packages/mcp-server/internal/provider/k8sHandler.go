@@ -11,6 +11,11 @@ const (
 )
 
 func KubernetesMetricAggregator(metrics []types.K8sResourceMetrics) []types.AggregatedMetrics {
+
+	if len(metrics) == 0 {
+		return []types.AggregatedMetrics{}
+	}
+
 	cpuUsage := make([]float64, 0)
 	memoryUsage := make([]float64, 0)
 
@@ -28,7 +33,7 @@ func KubernetesMetricAggregator(metrics []types.K8sResourceMetrics) []types.Aggr
 
 	cpu_metrics := types.AggregatedMetrics{
 		Provider:       types.ProviderKubernetes,
-		Resource:       "CpuMilli",
+		Resource:       "cpu_milli",
 		P50:            p50_cpu_usage,
 		P95:            p95_cpu_usage,
 		Avg:            average_cpu_usage,
@@ -42,7 +47,7 @@ func KubernetesMetricAggregator(metrics []types.K8sResourceMetrics) []types.Aggr
 
 	memory_metrics := types.AggregatedMetrics{
 		Provider:       types.ProviderKubernetes,
-		Resource:       "memoryGB",
+		Resource:       "memory_gb",
 		P50:            p50_memory_usage,
 		P95:            p95_memory_usage,
 		Avg:            average_memory_usage,
