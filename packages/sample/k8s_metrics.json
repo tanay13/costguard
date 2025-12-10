@@ -1,32 +1,36 @@
 [
   {
     "provider": "kubernetes",
-    "timestamp": 110000123,
+    "resource": "api-server",
+    "timestamp": 1736500001,
     "resource_metrics": {
       "k8s_resource": {
-        "cpu_milli": 23,
-        "memory_gb": 10
+        "cpu_milli": 420,
+        "memory_gb": 0.3
       }
     }
   },
   {
     "provider": "kubernetes",
-    "timestamp": 110000123,
+    "resource": "api-server",
+    "timestamp": 1736500061,
     "resource_metrics": {
       "k8s_resource": {
-        "cpu_milli": 20,
-        "memory_gb": 14
+        "cpu_milli": 380,
+        "memory_gb": 0.28
       }
     }
   },
   {
     "provider": "kubernetes",
-    "timestamp": 110000123,
+    "resource": "worker-job",
+    "timestamp": 1736500001,
     "resource_metrics": {
       "k8s_resource": {
-        "cpu_milli": 29,
-        "memory_gb": 19
+        "cpu_milli": 120,
+        "memory_gb": 0.12
       }
     }
   }
 ]
+
