@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tanay13/costguard/packages/mcp-server/internal/fixplan"
 	"github.com/tanay13/costguard/packages/mcp-server/internal/scan"
 	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
 )
@@ -99,23 +100,13 @@ func buildScanResponse(agg []types.AggregatedMetrics) types.ScanResponse {
 }
 
 func FixPlansHandler(c *gin.Context) {
-	var raw []types.MetricCollection
-
-	if err := c.BindJSON(&raw); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	var req types.FixPlanRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	agg := scan.DataPointAggregator(raw)
-
-	req := types.FixPlanRequest{
-		AggregatedMetrics: agg,
-		BudgetTarget:      500,
-		AutoApprove:       false,
-	}
-
-	resp := provider.GenerateFixPlan(req)
-
+	resp := fixplan.GenerateFixPlan(req)
 	c.JSON(200, resp)
 }
 
