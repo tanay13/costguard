@@ -3,8 +3,8 @@ package fixplan
 import (
 	"fmt"
 
-	"github.com/tanay13/costguard/packages/mcp-server/internal/provider/kubernetes"
-	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/provider/kubernetes"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/types"
 )
 
 func GenerateFixPlan(req types.FixPlanRequest) types.FixPlanResponse {

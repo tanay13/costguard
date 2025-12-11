@@ -1,6 +1,6 @@
 package kubernetes
 
-import "github.com/tanay13/costguard/packages/mcp-server/internal/types"
+import "github.com/tanay13/costguard/packages/mcp-server/pkg/types"
 
 const (
 	cpuRatePerMilli = 0.00001

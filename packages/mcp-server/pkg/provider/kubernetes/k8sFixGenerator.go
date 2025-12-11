@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/types"
 )
 
 func GenerateK8sFixActions(agg types.AggregatedMetrics) []types.FixAction {

@@ -6,9 +6,9 @@ import (
 	"sort"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tanay13/costguard/packages/mcp-server/internal/fixplan"
-	"github.com/tanay13/costguard/packages/mcp-server/internal/scan"
-	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/fixplan"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/scan"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/types"
 )
 
 func HealthHandler(c *gin.Context) {

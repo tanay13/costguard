@@ -5,8 +5,8 @@ import (
 	"math"
 	"sort"
 
-	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
-	"github.com/tanay13/costguard/packages/mcp-server/internal/utils"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/types"
+	"github.com/tanay13/costguard/packages/mcp-server/pkg/utils"
 )
 
 func Aggregate(
