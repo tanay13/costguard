@@ -1,0 +1,32 @@
+{
+  "metrics": [
+    {
+      "provider": "kubernetes",
+      "resource": "api-server",
+      "timestamp": 1,
+      "resource_metrics": {
+        "k8s_resource": {
+          "cpu_milli": 50,
+          "memory_gb": 0.10
+        }
+      }
+    },
+    {
+      "provider": "kubernetes",
+      "resource": "api-server",
+      "timestamp": 2,
+      "resource_metrics": {
+        "k8s_resource": {
+          "cpu_milli": 60,
+          "memory_gb": 0.12
+        }
+      }
+    }
+  ],
+  "actual_requests": {
+    "api-server": {
+      "cpu_milli": 400,
+      "memory_gb": 0.50
+    }
+  }
+}
