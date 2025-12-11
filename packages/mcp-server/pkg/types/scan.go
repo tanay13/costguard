@@ -29,3 +29,9 @@ type ScanResponse struct {
 	Resources []ScanResource `json:"resources"`
 	Summary   ScanSummary    `json:"summary"`
 }
+
+type ScanRequest struct {
+	Metrics        []MetricCollection  `json:"metrics"`
+	ActualRequests map[string]Requests `json:"actual_requests,omitempty"`
+	Paths          []string            `json:"paths,omitempty"`
+}

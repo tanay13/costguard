@@ -28,12 +28,16 @@ func ScanHandler(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+	resp, err := scan.RunScan(types.ScanRequest{
+		Metrics:        req.Metrics,
+		ActualRequests: req.ActualRequests,
+	})
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
 
-	agg := scan.DataPointAggregator(req.Metrics, req.ActualRequests)
-
-	response := buildScanResponse(agg)
-
-	c.JSON(200, response)
+	c.JSON(200, resp)
 }
 
 func buildScanResponse(agg []types.AggregatedMetrics) types.ScanResponse {
