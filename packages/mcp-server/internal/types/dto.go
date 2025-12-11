@@ -1,10 +1,5 @@
 package types
 
-type ScanResponse struct {
-	Project  string              `json:"project"`
-	Hotspots []AggregatedMetrics `json:"hotspots"`
-}
-
 type FixPlanRequest struct {
 	AggregatedMetrics []AggregatedMetrics `json:"aggregated_metrics"`
 	BudgetTarget      float64             `json:"budget_target_usd,omitempty"`

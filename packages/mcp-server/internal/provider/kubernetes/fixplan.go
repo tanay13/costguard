@@ -1,4 +1,4 @@
-package provider
+package kubernetes
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ func GenerateFixPlan(req types.FixPlanRequest) types.FixPlanResponse {
 	totalCurrent := 0.0
 
 	for i, metric := range req.AggregatedMetrics {
-		totalCurrent += metric.CostUSD
+		totalCurrent += metric.CostCurrentUSD
 
 		switch metric.Provider {
 		case types.ProviderKubernetes:
