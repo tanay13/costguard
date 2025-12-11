@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"math"
 	"sort"
 
@@ -45,9 +44,7 @@ func Aggregate(
 		optimalCPU, optimalMem := OptimalRequests(cpuStat, memStat)
 
 		currentCost := ComputeCostFromRequests(reqCPU, reqMem)
-		fmt.Println(reqCPU, reqMem, currentCost)
 		optimalCost := ComputeCostFromRequests(optimalCPU, optimalMem)
-		fmt.Println(optimalCPU, optimalMem, optimalCost)
 		out = append(out, types.AggregatedMetrics{
 			Provider: types.ProviderKubernetes,
 			Resource: name,

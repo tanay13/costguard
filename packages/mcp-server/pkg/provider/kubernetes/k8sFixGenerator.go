@@ -13,8 +13,18 @@ func GenerateK8sFixActions(agg types.AggregatedMetrics) []types.FixAction {
 	reqCPU := agg.RequestedCpuMilli
 	reqMem := agg.RequestedMemoryGB
 
-	optCPU := agg.OptimalCpuMilli
-	optMem := agg.OptimalMemoryGB
+	cpu := agg.Metrics["cpu"]
+	mem := agg.Metrics["memory"]
+
+	optCPU := cpu.P95 * 1.2
+	if optCPU < 50 {
+		optCPU = 50
+	}
+
+	optMem := mem.P95 * 1.1
+	if optMem < 0.1 {
+		optMem = 0.1
+	}
 
 	cpuPercent := ((optCPU - reqCPU) / reqCPU) * 100
 	if math.Abs(cpuPercent) > 5 {
