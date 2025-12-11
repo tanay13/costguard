@@ -1,4 +1,4 @@
-package provider
+package kubernetes
 
 import (
 	"fmt"
@@ -30,7 +30,7 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 			"resources.requests.cpu",
 			-40,
 			"CPU is underutilized compared to inferred request",
-			metric.CostUSD,
+			metric.CostCurrentUSD,
 			priority,
 		))
 	}
@@ -42,7 +42,7 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 			"resources.requests.cpu",
 			+25,
 			"CPU usage is close to saturation (p95 > 90% of inferred request)",
-			metric.CostUSD,
+			metric.CostCurrentUSD,
 			priority,
 		))
 	}
@@ -54,7 +54,7 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 			"resources.requests.memory",
 			-35,
 			"Memory is underutilized compared to inferred request",
-			metric.CostUSD,
+			metric.CostCurrentUSD,
 			priority,
 		))
 	}
@@ -66,7 +66,7 @@ func generateK8sFixActions(metric types.AggregatedMetrics, priority int) []types
 			"resources.requests.memory",
 			+20,
 			"Memory usage is close to saturation",
-			metric.CostUSD,
+			metric.CostCurrentUSD,
 			priority,
 		))
 	}

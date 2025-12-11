@@ -1,39 +1,31 @@
 package scan
 
 import (
-	"github.com/tanay13/costguard/packages/mcp-server/internal/provider"
+	"github.com/tanay13/costguard/packages/mcp-server/internal/provider/kubernetes"
 	"github.com/tanay13/costguard/packages/mcp-server/internal/types"
 )
 
-func DataPointAggregator(metricCollection []types.MetricCollection) []types.AggregatedMetrics {
-	aggregatedMetrics := make([]types.AggregatedMetrics, 0)
+func DataPointAggregator(
+	points []types.MetricCollection,
+	actualRequests map[string]types.Requests,
+) []types.AggregatedMetrics {
 
-	providerMetrics := make(map[types.Provider]map[string][]types.MetricCollection)
+	grouped := make(map[types.Provider]map[string][]types.MetricCollection)
 
-	for _, c := range metricCollection {
-		if providerMetrics[c.Provider] == nil {
-			providerMetrics[c.Provider] = make(map[string][]types.MetricCollection)
+	for _, p := range points {
+		if grouped[p.Provider] == nil {
+			grouped[p.Provider] = make(map[string][]types.MetricCollection)
 		}
-
-		resourceName := c.Resource
-		if resourceName == "" {
-			resourceName = "unknown"
-		}
-
-		providerMetrics[c.Provider][resourceName] =
-			append(providerMetrics[c.Provider][resourceName], c)
+		grouped[p.Provider][p.Resource] = append(grouped[p.Provider][p.Resource], p)
 	}
 
-	if k8sGroups, ok := providerMetrics[types.ProviderKubernetes]; ok {
-		result := provider.KubernetesMetricAggregator(k8sGroups)
-		aggregatedMetrics = append(aggregatedMetrics, result...)
+	out := []types.AggregatedMetrics{}
+
+	if km, ok := grouped[types.ProviderKubernetes]; ok {
+		out = append(out, kubernetes.Aggregate(km, actualRequests)...)
 	}
 
-	// For Future providers similar code can be used:
-	// if lambdaGroups, ok := providerMetrics[types.ProviderAWSLambda]; ok {
-	//     result := provider.LambdaMetricAggregator(lambdaGroups)
-	//     aggregatedMetrics = append(aggregatedMetrics, result...)
-	// }
+	// TODO: lambda, vercel etc.
 
-	return aggregatedMetrics
+	return out
 }

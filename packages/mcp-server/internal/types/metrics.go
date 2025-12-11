@@ -52,9 +52,24 @@ type MetricStat struct {
 }
 
 type AggregatedMetrics struct {
-	Provider   Provider              `json:"provider"`
-	Resource   string                `json:"resource"`
-	Metrics    map[string]MetricStat `json:"metrics"`
-	CostUSD    float64               `json:"cost_usd"`
-	DataPoints int                   `json:"data_points"`
+	Provider Provider              `json:"provider"`
+	Resource string                `json:"resource"`
+	Metrics  map[string]MetricStat `json:"metrics"`
+
+	RequestedCpuMilli float64 `json:"requested_cpu_milli"`
+	RequestedMemoryGB float64 `json:"requested_memory_gb"`
+
+	OptimalCpuMilli float64 `json:"optimal_cpu_milli"`
+	OptimalMemoryGB float64 `json:"optimal_memory_gb"`
+
+	CostCurrentUSD float64 `json:"cost_current_usd"`
+	CostOptimalUSD float64 `json:"cost_optimal_usd"`
+	CostSavingsUSD float64 `json:"cost_savings_usd"`
+
+	DataPoints int `json:"data_points"`
+}
+
+type Requests struct {
+	CpuMilli float64 `json:"cpu_milli"`
+	MemoryGB float64 `json:"memory_gb"`
 }
