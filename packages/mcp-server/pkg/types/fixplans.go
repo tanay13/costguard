@@ -10,6 +10,8 @@ type FixAction struct {
 
 	FilesToEdit []string `json:"files_to_edit,omitempty"`
 	AIGuidance  string   `json:"ai_guidance"`
+
+	EstimatedSavingsUSD float64 `json:"estimated_savings_usd"`
 }
 
 type FixOperation struct {
@@ -34,4 +36,23 @@ type FixPlanResponse struct {
 	RequiresApproval bool        `json:"requires_approval"`
 	Actions          []FixAction `json:"actions"`
 	Summary          string      `json:"summary"`
+}
+
+type AIDecision struct {
+	ActionID            string  `json:"action_id"`
+	Decision            string  `json:"decision"`
+	Rationale           string  `json:"rationale"`
+	Priority            int     `json:"priority"`
+	RiskLevel           string  `json:"risk_level"`
+	EstimatedSavingsUSD float64 `json:"estimated_savings_usd"`
+}
+
+type AIDecisionSummary struct {
+	TotalActions    int          `json:"total_actions"`
+	ActionsToApply  int          `json:"actions_to_apply"`
+	ActionsDeferred int          `json:"actions_deferred"`
+	ActionsSkipped  int          `json:"actions_skipped"`
+	TotalSavingsUSD float64      `json:"total_savings_usd"`
+	Decisions       []AIDecision `json:"decisions"`
+	Summary         string       `json:"summary"`
 }

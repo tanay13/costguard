@@ -25,7 +25,7 @@ func DataPointAggregator(
 		out = append(out, kubernetes.Aggregate(km, actualRequests)...)
 	}
 
-	// TODO: lambda, vercel etc.
+
 
 	return out
 }
