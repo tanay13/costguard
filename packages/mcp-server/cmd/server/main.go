@@ -45,7 +45,6 @@ func buildScanResponse(agg []types.AggregatedMetrics) types.ScanResponse {
 	totalCurrent := 0.0
 	totalOptimal := 0.0
 
-
 	temp := []struct {
 		name    string
 		savings float64
@@ -104,13 +103,21 @@ func buildScanResponse(agg []types.AggregatedMetrics) types.ScanResponse {
 }
 
 func FixPlansHandler(c *gin.Context) {
-	var req types.FixPlanRequest
+	var req types.FixPlansAPIRequest
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	resp := fixplan.GenerateFixPlan(req)
+	aggregated := scan.DataPointAggregator(req.Metrics, req.ActualRequests)
+
+	fpReq := types.FixPlanRequest{
+		AggregatedMetrics: aggregated,
+		BudgetTarget:      req.BudgetTarget,
+		AutoApprove:       req.AutoApprove,
+	}
+
+	resp := fixplan.GenerateFixPlan(fpReq)
 	c.JSON(200, resp)
 }
 

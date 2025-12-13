@@ -1,5 +1,12 @@
 package types
 
+type FixPlansAPIRequest struct {
+	Metrics        []MetricCollection  `json:"metrics"`
+	ActualRequests map[string]Requests `json:"actual_requests,omitempty"`
+	BudgetTarget   float64             `json:"budget_target_usd,omitempty"`
+	AutoApprove    bool                `json:"auto_approve,omitempty"`
+}
+
 type FixAction struct {
 	Provider    Provider `json:"provider"`
 	Resource    string   `json:"resource"`

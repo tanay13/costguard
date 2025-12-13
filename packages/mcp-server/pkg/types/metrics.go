@@ -45,6 +45,11 @@ type ResourceMetrics struct {
 	VercelResourceMetrics VercelResourceMetrics `json:"vercel_resource,omitempty"`
 }
 
+type Requests struct {
+	CpuMilli float64 `json:"cpu_milli"`
+	MemoryGB float64 `json:"memory_gb"`
+}
+
 type MetricStat struct {
 	P50 float64 `json:"p50"`
 	P95 float64 `json:"p95"`
@@ -67,9 +72,4 @@ type AggregatedMetrics struct {
 	CostSavingsUSD float64 `json:"cost_savings_usd"`
 
 	DataPoints int `json:"data_points"`
-}
-
-type Requests struct {
-	CpuMilli float64 `json:"cpu_milli"`
-	MemoryGB float64 `json:"memory_gb"`
 }
