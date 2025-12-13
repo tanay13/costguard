@@ -45,7 +45,7 @@ func buildScanResponse(agg []types.AggregatedMetrics) types.ScanResponse {
 	totalCurrent := 0.0
 	totalOptimal := 0.0
 
-	// sort by savings later
+
 	temp := []struct {
 		name    string
 		savings float64

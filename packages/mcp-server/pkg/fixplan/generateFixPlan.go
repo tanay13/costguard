@@ -20,6 +20,15 @@ func GenerateFixPlan(req types.FixPlanRequest) types.FixPlanResponse {
 		switch agg.Provider {
 		case types.ProviderKubernetes:
 			kActions := kubernetes.GenerateK8sFixActions(agg)
+
+			for i := range kActions {
+
+				if len(kActions) > 1 {
+					kActions[i].EstimatedSavingsUSD = agg.CostSavingsUSD / float64(len(kActions))
+				} else {
+					kActions[i].EstimatedSavingsUSD = agg.CostSavingsUSD
+				}
+			}
 			actions = append(actions, kActions...)
 		}
 
